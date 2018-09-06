@@ -8,7 +8,6 @@
 
 import Foundation
 
-struct Reply:Decodable {
-    let reply:String;
-    let id:String;
+struct Reply:Codable {
+    let message:String;
 }

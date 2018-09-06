@@ -15,6 +15,18 @@ class CustomizeSegmentedControl: UIControl {
     var selector:UIView!;
     var selectedValue=0;
     
+    public func initialization(){
+        for btn in buttons{
+            btn.setTitleColor(textColor, for: .normal)
+            btn.titleLabel?.font=UIFont.systemFont(ofSize: 16)
+            
+        }
+        buttons[0].titleLabel?.font=UIFont.systemFont(ofSize: 20)
+        //buttons[0].titleLabel?.font=UIFont.boldSystemFont(ofSize: 20)
+        buttons[0].setTitleColor(selectedColor, for: .normal)
+        
+    }
+    
     @IBInspectable
     var borderWidth:CGFloat=0{
         didSet{
@@ -33,18 +45,19 @@ class CustomizeSegmentedControl: UIControl {
     var ButtonTitleString: String = ""{
         didSet{
             updateView()
+            
         }
     }
     
     @IBInspectable
-    var textColor:UIColor = .lightGray{
+    var textColor:UIColor = .black{
         didSet{
             updateView()
         }
     }
     
     @IBInspectable
-    var selectedColor:UIColor = .darkGray{
+    var selectedColor:UIColor = .black{
         didSet{
             updateView()
         }
@@ -53,8 +66,13 @@ class CustomizeSegmentedControl: UIControl {
     @objc func buttonTapped(button:UIButton){
         for btn in buttons{
             btn.setTitleColor(textColor, for: .normal)
+            btn.titleLabel?.font=UIFont.systemFont(ofSize: 16)
+            btn.titleEdgeInsets.bottom = 0;
             if btn==button{
                 btn.setTitleColor(selectedColor, for: .normal)
+                btn.titleLabel?.font=UIFont.systemFont(ofSize: 20)
+                //btn.titleLabel?.font=UIFont.boldSystemFont(ofSize: 19)
+                btn.titleEdgeInsets.bottom = 4;
             }
         }
         selectedValue=buttons.index(of: button)!;
@@ -63,12 +81,11 @@ class CustomizeSegmentedControl: UIControl {
             self.selector.frame.origin.x=selectorStartPosition
             
         })
-        print (self.selector.frame.origin.x);
         sendActions(for: .valueChanged)
     }
     
     
-    func updateView() {
+    public func updateView() {
         
         buttons.removeAll()
         subviews.forEach { (view) in
@@ -79,21 +96,21 @@ class CustomizeSegmentedControl: UIControl {
             let button=UIButton(type: .system)
             button.setTitle(buttonTitle, for: .normal)
             button.setTitleColor(textColor, for: .normal)
-         //   button.titleLabel?.font = UIFont(name: "STXingkai", size: 20)
+            button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
             button.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
             buttons.append(button)
         }
-        buttons[0].setTitleColor(UIColor.black, for: .normal)
+        buttons[0].titleLabel?.font=UIFont.systemFont(ofSize: 20)
         let sv=UIStackView(arrangedSubviews: buttons)
         let selectorWidth=frame.width/CGFloat(buttonTitles.count)
         selector=UIView(frame: CGRect(x: 0, y: 0, width: selectorWidth, height: frame.height))
-        let border = CALayer()
+       /* let border = CALayer()
         let borderWidth = CGFloat(2.0)
         border.borderColor = UIColor.black.cgColor
         border.frame = CGRect(x: selector.frame.size.width*0.3, y: self.frame.size.height - borderWidth, width:  selector.frame.size.width*0.4, height: selector.frame.size.height)
         border.borderWidth = borderWidth
         selector.layer.addSublayer(border)
-        self.layer.masksToBounds = true
+        self.layer.masksToBounds = true*/
 
         addSubview(selector);
         sv.axis = .horizontal

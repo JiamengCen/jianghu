@@ -9,8 +9,7 @@
 import UIKit
 
 class HobbyNameCell: UICollectionViewCell {
-    
-    
+
     @IBOutlet weak var hobbyNameLable: UILabel!
     
     override var isSelected: Bool{

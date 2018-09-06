@@ -10,13 +10,12 @@ import UIKit
 import AVFoundation
 
 class QRViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate {
-    
     var layer=AVCaptureVideoPreviewLayer();
     var session=AVCaptureSession()
     override func viewDidLoad() {
+        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
         super.viewDidLoad()
-      
-       // session=AVCaptureSession()
+        session=AVCaptureSession()
         let captureDevice=AVCaptureDevice.default(for: .video)
         do{
             let input=try AVCaptureDeviceInput(device: captureDevice!)
@@ -33,21 +32,77 @@ class QRViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate 
         layer.frame=view.layer.bounds
         view.layer.addSublayer(layer)
         session.startRunning()
-        
         // Do any additional setup after loading the view.
     }
-
+    
+    func requestCameraPermission(){
+        AVCaptureDevice.requestAccess(for: .video, completionHandler: {accessGranted in
+            guard accessGranted == true else { return }
+        })
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        
         if metadataObjects != nil && metadataObjects.count != 0{
             if let object = metadataObjects[0] as? AVMetadataMachineReadableCodeObject {
                 if object.type == AVMetadataObject.ObjectType.qr {
-                    if(UserInfo.ifLogin){
-                        if(object.stringValue?.isNumeric)!{
+                    if(UserInfo.token != ""){
+                        /*let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "finishScan");
+                        self.show(viewChange!, sender: self) */
+                        let data = object.stringValue
+                        let encoder=JSONEncoder();
+                        let dataList = data!.components(separatedBy: "|")
+                        print (dataList[0])
+                        print (dataList[1])
+                        guard let url=URL(string: "https://app.meljianghu.com/api/activity/check/" + dataList[0] + "/" + dataList[1])else{return}
+                        
+                        let headers = [ "Content-Type": "application/json",
+                                        "Accept": "application/json",
+                                        "Authorization": "Bearer"+" " + UserInfo.token ]
+                        var request=URLRequest(url: url)
+                        request.httpMethod="GET"
+                        //let para=String(data: json!, encoding: .utf8)
+                        //request.httpBody = para!.data(using: String.Encoding.utf8);
+                        request.allHTTPHeaderFields = headers;
+                        let sessionUrl=URLSession.shared
+                        sessionUrl.dataTask(with: request) { (data, response, error) in
+                            if let data=data{
+                                do {
+                                    let printString=String(data: data, encoding: String.Encoding.utf8)
+                                    print(printString)
+                                    let reply = try JSONDecoder().decode(Reply.self, from: data)
+                                    if(reply.message=="success"){
+
+                                        DispatchQueue.main.async {
+                                            self.performSegue(withIdentifier: "checkSuccess", sender:nil)
+
+                                            //performSegue(withIdentifier: "checkSuccess", sender:QRViewController.self)
+                                           // let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "finishScan");
+                                           // self.present(viewChange!, animated:true, completion:nil)
+                                        }
+                                    }
+                                    else{
+                                        DispatchQueue.main.async {
+                                            // create the alert
+                                            let alert = UIAlertController(title: "未能成功扫码", message: "请重试", preferredStyle: UIAlertControllerStyle.alert)
+                                            // add the actions (buttons)
+                                            alert.addAction(UIAlertAction(title: "了解", style: UIAlertActionStyle.default, handler: nil))
+                                            alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+                                            // show the alert
+                                            self.present(alert, animated: true, completion: nil)
+                                        }
+                                    }
+                                } catch{
+                                    print(error);
+                                }
+                            }
+                            }.resume();
+                       /* if(object.stringValue?.isNumeric)!{
                             let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "finishScan");
                             self.show(viewChange!, sender: self)
                         }
@@ -55,7 +110,7 @@ class QRViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate 
                             let alert = UIAlertController(title: "提示", message: "二维码无效", preferredStyle: UIAlertControllerStyle.alert)
                             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                             self.present(alert, animated: true, completion: nil)
-                        }                        
+                        }          */
                         session.stopRunning()
                         return;
                         //self.present(viewChange!, animated:true, completion:nil)

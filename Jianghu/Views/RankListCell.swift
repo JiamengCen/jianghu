@@ -9,8 +9,15 @@
 import UIKit
 
 class RankListCell: UITableViewCell {
-
+    @IBOutlet weak var userHead: UIImageView!
+    
+    @IBOutlet weak var creditLogo: UIImageView!
+    @IBOutlet weak var nameTitle: UILabel!
+    @IBOutlet weak var medal: UIImageView!
+    @IBOutlet weak var creditNum: UILabel!
+    
     override func awakeFromNib() {
+        medal.isHidden = true
         super.awakeFromNib()
         // Initialization code
     }

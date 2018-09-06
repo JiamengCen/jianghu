@@ -16,11 +16,12 @@ class activityNavCell: UICollectionViewCell {
         didSet{
             if self.isSelected
             {
-                name.textColor=UIColor.lightGray
+                name.textColor=UIColor.red
             }
             else
             {
                 name.textColor=UIColor.black
+                //name.font=UIFont.boldSystemFont(ofSize: 20.0)
             }
         }
     }

@@ -10,9 +10,37 @@ import UIKit
 
 class HobbyTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var chatButton: UIButton!
+    
+    @IBOutlet weak var likeText: UILabel!
+    @IBOutlet weak var likeImg: UIImageView!
+    @IBAction func repost(_ sender: Any) {
+    }
+    var imgs=Array<UIImageView>();
+    var imgCount=0;
    
+    @IBOutlet weak var unlikeButton: UIButton!
+    //var hobby:HobbyArticle?
+    @IBAction func changeLike(_ sender: Any) {
+        if(likeText.text=="点赞"){
+            likeText.text = "已赞"
+            likeText.textColor=UIColor.red
+            likeImg.image=UIImage(named: "点赞选中")
+             
+        }
+        else{
+            likeText.text = "点赞"
+            likeText.textColor=UIColor.lightGray
+            likeImg.image=UIImage(named: "点赞未选中")
+        }
+    }
+    @IBOutlet weak var location: UILabel!
+    @IBOutlet weak var time: UILabel!
+    @IBOutlet weak var bestMan: UIView!
+    @IBOutlet var head: UIImageView!
 
-    @IBOutlet weak var tag2: UILabel!
+    @IBOutlet weak var cate: UILabel!
+    
     
     @IBOutlet weak var img6: UIImageView!
     @IBOutlet weak var img5: UIImageView!
@@ -25,6 +53,9 @@ class HobbyTableViewCell: UITableViewCell {
     @IBOutlet weak var imgStack1: UIStackView!
     @IBOutlet weak var user: UILabel!
     @IBOutlet weak var content: UILabel!
+    @IBOutlet weak var commentButton: UIButton!
+    
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()

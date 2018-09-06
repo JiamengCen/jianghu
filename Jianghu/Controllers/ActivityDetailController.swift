@@ -10,8 +10,8 @@ import UIKit
 
 class ActivityDetailController: UIViewController {
 
-    
-
+    @IBOutlet weak var popUpWindow: UIView!
+    @IBOutlet var headImg: UIImageView!
     @IBOutlet weak var imgBottom: UIImageView!
     @IBOutlet weak var publisher: UILabel!
     @IBOutlet weak var content: UILabel!
@@ -19,58 +19,27 @@ class ActivityDetailController: UIViewController {
     @IBOutlet weak var activityTitle: UILabel!
     @IBOutlet weak var place: UILabel!
     @IBOutlet weak var time: UILabel!
-    @IBAction func JoinActivity(_ sender: Any) {
-        if(UserInfo.ifLogin){
-            let para="user="+UserInfo.id+"&activity="+(activity?.id)!;
-            guard let url=URL(string: "http://jhapp.com.au/join_Action.php") else{return}
-            var request=URLRequest(url: url)
-            request.httpMethod="POST"
-            request.httpBody=para.data(using: String.Encoding.utf8);
-            let session=URLSession.shared
-            session.dataTask(with: request) { (data, response, error) in
-                if let data=data{
-                    guard let result = try? JSONSerialization.jsonObject(with: data, options:[]) as? [String:
-                        Any] else{
-                            print("Error: Couldn't decode data ")
-                            return
-                    }
-                    DispatchQueue.main.async {
-                        if result?["reply"] as! String=="SUCCESS"{
-                            let alert = UIAlertController(title: "提示", message: "报名成功", preferredStyle: UIAlertControllerStyle.alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                            self.present(alert, animated: true, completion: nil)
-                        }
-                        else{
-                            let alert = UIAlertController(title: "提示", message: "报名失败", preferredStyle: UIAlertControllerStyle.alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                            self.present(alert, animated: true, completion: nil)
-                        }
-                    }
-                }
-            }.resume();
-            
-            
-        }
-        else{
-            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
-            self.show(viewChange!, sender: self)
-        }
-    }
+    //private var customView: UIView!
+    
     var activity:Activity?
     override func viewDidLoad() {
         activityTitle.text = (activity?.title)!
-        place.text=(activity?.place)!
-        time.text=(activity?.times)!
-        publisher.text=(activity?.user_name)!
-        //phone.text=(activity?.phone)!
+        publisher.text=(activity?.title)!
+        place.text=(activity?.address)!
+        time.text=(activity?.start_time)! + " - " + (activity?.end_time)!
         content.text=activity?.content
-       // img.downloadedFrom(link: "http://jhapp.com.au/"+(activity?.img)!)
+        publisher.text = (activity?.user_name)!
+        let topLink="https://app.meljianghu.com/storage/"+activity!.img_url_top
+        img.downloadedFrom(url: topLink)
         img.contentMode = .scaleAspectFill
-        imgBottom.downloadedFrom(link: "http://jhapp.com.au/"+(activity?.img)!)
+        let bottomLink="https://app.meljianghu.com/storage/"+activity!.img_url_bottom
+        imgBottom.downloadedFrom(url: bottomLink)
         imgBottom.contentMode = .scaleAspectFill
-        super.viewDidLoad()
+        headImg.layer.cornerRadius=headImg.frame.height/2
+        headImg.layer.masksToBounds=true
+        //customView.isHidden = true
 
-        // Do any additional setup after loading the view.
+        super.viewDidLoad()
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,15 +47,81 @@ class ActivityDetailController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    
+    @IBOutlet weak var likeImg: UIImageView!
+    @IBAction func likeClick(_ sender: Any) {
+        if(likeImg.image==UIImage(named: "hobby")){
+           likeImg.image=UIImage(named: "兴趣选中")
+            }
+        else{
+            likeImg.image=UIImage(named: "hobby")
+        }
+        
     }
-    */
-
+    @IBOutlet weak var like: UIButton!
+    @IBAction func jionActivity(_ sender: Any) {
+        
+        //let data=UploadHobby(content: contentView.text!, image_url: img_array, collection_id:String( selectedCollection!.id), cate_id: String(selectedCategory!.id))
+        //let data="{ 'activity_id': "
+        if(UserInfo.token != ""){
+            let data=JoinActivityData(activity_id: String( activity!.id))
+            let encoder=JSONEncoder();
+            
+            encoder.outputFormatting = .prettyPrinted
+            let json=try? encoder.encode(data)
+            print(String(data: json!, encoding: .utf8)!)
+            guard let url=URL(string: "https://app.meljianghu.com/api/activity/join") else{return}
+            let headers = [ "Content-Type": "application/json",
+                            "Accept": "application/json",
+                            "Authorization": "Bearer"+" " + UserInfo.token ]
+            var request=URLRequest(url: url)
+            request.httpMethod="POST"
+            let para=String(data: json!, encoding: .utf8)
+            request.httpBody = para!.data(using: String.Encoding.utf8);
+            request.allHTTPHeaderFields = headers;
+            let session=URLSession.shared
+            session.dataTask(with: request) { (data, response, error) in
+                if let data=data{
+                    do {
+                        let printString=String(data: data, encoding: String.Encoding.utf8)
+                        print(printString)
+                        let reply = try JSONDecoder().decode(Reply.self, from: data)
+                        if(reply.message=="success"){
+                            DispatchQueue.main.async {
+                                // create the alert
+                                let alert = UIAlertController(title: "报名成功", message: "前往参与的活动界面获取二维码", preferredStyle: UIAlertControllerStyle.alert)
+                                // add the actions (buttons)
+                                alert.addAction(UIAlertAction(title: "完成", style: UIAlertActionStyle.default, handler: nil))
+                                alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+                                // show the alert
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        }
+                        else{
+                            DispatchQueue.main.async {
+                                // create the alert
+                                let alert = UIAlertController(title: "报名不可重复", message: "前往参与的活动界面获取二维码", preferredStyle: UIAlertControllerStyle.alert)
+                                // add the actions (buttons)
+                                alert.addAction(UIAlertAction(title: "了解", style: UIAlertActionStyle.default, handler: nil))
+                                alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+                                // show the alert
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        }
+                    } catch{
+                        print(error);
+                    }
+                }
+                }.resume();
+         
+        }
+        else{
+            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+            self.show(viewChange!, sender: self)
+        }
+    }
 }
+
+
+

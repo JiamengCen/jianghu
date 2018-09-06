@@ -9,7 +9,8 @@
 import Foundation
 
 struct UserInfo {
-    static var id=String();
-    static var ifLogin=false;
-    static var userName=String();
+    static var token=String();
+    static var myInfo:UserInformation?
+    
+    
 }

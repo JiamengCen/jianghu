@@ -12,8 +12,23 @@ class UserController: UIViewController {
 
     @IBOutlet weak var userName: UILabel!
     
-    @IBOutlet weak var loginPanel: UIStackView!
-    @IBOutlet weak var userID: UILabel!
+    @IBOutlet weak var loginout: UIButton!
+    @IBOutlet weak var plzLogin: UIButton!
+    @IBAction func LoginOut(_ sender: Any) {
+        UserInfo.myInfo=nil
+        UserInfo.token=""
+        let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "tab");
+        self.present(viewChange!, animated:true, completion:nil)
+    }
+    @IBAction func pleaseLogin(_ sender: Any) {
+        if(UserInfo.token != ""){
+            return
+        }
+        else{
+            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+            self.show(viewChange!, sender: self)
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,50 +36,40 @@ class UserController: UIViewController {
     }
 
     @IBAction func goToMyActivity(_ sender: Any) {
-        if(UserInfo.ifLogin){            performSegue(withIdentifier: "goToMyActivity", sender: self)
+        if(UserInfo.token != ""){
+            performSegue(withIdentifier: "goToMyActivity", sender: self)
         }
-        
     }
     
     @IBAction func goToMyHobby(_ sender: Any) {
-        if(UserInfo.ifLogin){
-            
+        if(UserInfo.token != ""){
             performSegue(withIdentifier: "goToMyHobby", sender: self)
         }
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        if(UserInfo.ifLogin){
-            userName.text=UserInfo.userName
-           loginPanel.isHidden=true
-            
-            // userID.text=UserInfo.id
-        }
-        else{
-            userName.text="请登录"
-            loginPanel.isHidden=false
-           // userID.text=""
-        }
-    }
-
-
+    
     @IBAction func goToJoinedActivity(_ sender: Any) {
-        if(UserInfo.ifLogin){
+        if(UserInfo.token != ""){
             
             performSegue(withIdentifier: "goToJoinedActivity", sender: self)
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
-    */
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if(UserInfo.token != ""){
+            plzLogin.isHidden=true
+            userName.text=UserInfo.myInfo?.name
+            // userID.text=UserInfo.id
+        }
+        else{
+            plzLogin.isHidden=false
+            userName.text="请登录"
+           // userID.text=""
+        }
+    }
 }
+

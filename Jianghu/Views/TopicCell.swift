@@ -10,7 +10,8 @@ import UIKit
 
 class TopicCell: UITableViewCell {
 
- 
+    @IBOutlet weak var time: UILabel!
+    
     @IBOutlet weak var content: UILabel!
     @IBOutlet weak var tag2: UILabel!
     @IBOutlet weak var tag1: UILabel!

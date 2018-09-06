@@ -54,18 +54,18 @@ class HobbyArticleController: UIViewController {
         imgs.append(img6);
         
         content.text=article?.content;
-        author.text=article?.user_name;
+       // author.text=article?.user_name;
         //let defualtLink="http://jianghu.000webhostapp.com/"
         //let addLink=article?.img
-        let link="http://jhapp.com.au/"+(article?.img)!
+       // let link="http://jhapp.com.au/"+(article?.img)!
         for img in imgs{
-            if(imgs.index(of: img)!<Int((article?.img_num)!)!){
+           /* if(imgs.index(of: img)!<Int((article?.img_num)!)!){
                 let pictureTap = UITapGestureRecognizer(target: self, action: #selector(HobbyArticleController.imageTapped(_:)))
                 img.isUserInteractionEnabled=true;
                 img.addGestureRecognizer(pictureTap);
                 img.downloadedFrom(link: link+"_"+String(imgs.index(of: img)!))
                 img.contentMode = .scaleAspectFill
-            }
+            }*/
         }
         
         

@@ -1,0 +1,56 @@
+PODS:
+  - libwebp (0.6.1):
+    - libwebp/core (= 0.6.1)
+    - libwebp/dec (= 0.6.1)
+    - libwebp/demux (= 0.6.1)
+    - libwebp/dsp (= 0.6.1)
+    - libwebp/enc (= 0.6.1)
+    - libwebp/mux (= 0.6.1)
+    - libwebp/utils (= 0.6.1)
+    - libwebp/webp (= 0.6.1)
+  - libwebp/core (0.6.1):
+    - libwebp/webp
+  - libwebp/dec (0.6.1):
+    - libwebp/core
+  - libwebp/demux (0.6.1):
+    - libwebp/core
+  - libwebp/dsp (0.6.1):
+    - libwebp/core
+  - libwebp/enc (0.6.1):
+    - libwebp/core
+  - libwebp/mux (0.6.1):
+    - libwebp/core
+  - libwebp/utils (0.6.1):
+    - libwebp/core
+  - libwebp/webp (0.6.1)
+  - PusherChatkit (0.9.0):
+    - PusherPlatform (~> 0.5.0)
+  - PusherPlatform (0.5.0)
+  - SDWebImage (4.4.2):
+    - SDWebImage/Core (= 4.4.2)
+  - SDWebImage/Core (4.4.2)
+  - SDWebImage/WebP (4.4.2):
+    - libwebp (~> 0.5)
+    - SDWebImage/Core
+
+DEPENDENCIES:
+  - PusherChatkit
+  - SDWebImage (~> 4.0)
+  - SDWebImage/WebP
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - libwebp
+    - PusherChatkit
+    - PusherPlatform
+    - SDWebImage
+
+SPEC CHECKSUMS:
+  libwebp: 0f01098c6c17175391af621b2f14150f3ca16e16
+  PusherChatkit: e5638cf69576eed5e793f19bb4c6d564abaac7f1
+  PusherPlatform: 207b5d16dae956a697d5d12d823d9855217998b0
+  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+
+PODFILE CHECKSUM: 9e3decf832bc3518b94c4df17a37321ea4f282fe
+
+COCOAPODS: 1.5.2

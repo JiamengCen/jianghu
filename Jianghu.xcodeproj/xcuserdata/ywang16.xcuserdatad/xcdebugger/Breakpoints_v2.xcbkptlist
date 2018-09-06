@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Jianghu/ActivityDetailController.swift"
+            timestampString = "550981835.063717"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "JoinActivity(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Jianghu.ActivityDetailController.JoinActivity(Any) -&gt; ()"
+                  moduleName = "Jianghu"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ywang16/Desktop/IOSProject/Jianghu/Jianghu/ActivityDetailController.swift"
+                  timestampString = "550910758.493135"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "169">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Jianghu.ActivityDetailController.JoinActivity(Any) -&gt; ()"
+                  moduleName = "Jianghu"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ywang16/Desktop/IOSProject/Jianghu/Jianghu/ActivityDetailController.swift"
+                  timestampString = "550910758.5034699"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "23"
+                  endingLineNumber = "23"
+                  offsetFromSymbolStart = "2797">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

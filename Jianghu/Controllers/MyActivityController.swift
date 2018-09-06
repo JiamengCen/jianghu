@@ -10,31 +10,42 @@ import UIKit
 
 class MyActivityController: UIViewController,UITableViewDelegate,UITableViewDataSource {
 
+    @IBOutlet var loading: UIActivityIndicatorView!
     @IBOutlet weak var content: UITableView!
     var activities=[Activity]();
     override func viewDidLoad() {
         super.viewDidLoad()
         content.delegate=self
         content.dataSource=self
-        
-        guard let url = URL(string:"http://jhapp.com.au/displayUserActivity.php"+"?id="+UserInfo.id) else {
+        loading.isHidden=false
+        loading.startAnimating();
+        content.isHidden=true
+        guard let url = URL(string:"https://app.meljianghu.com/api/activity/my") else {
             return
         }
+        var request=URLRequest(url: url)
+        request.httpMethod="GET"
+        let headers = [ "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Bearer"+" " + UserInfo.token]
+        request.allHTTPHeaderFields = headers
         let session=URLSession.shared
-        session.dataTask(with: url) { (data, response, error) in
-            if let response=response{
-                print(response);
-            }
+        session.dataTask(with: request) { (data, response, error) in
             if let data=data{
                 do{
+                    let printString=String(data: data, encoding: String.Encoding.utf8)
+                    print(printString)
                     self.activities=try JSONDecoder().decode([Activity].self, from: data)
                 }catch{
                     print(error);
                 }
+            }
                 DispatchQueue.main.async {
+                    self.loading.isHidden=true
+                    self.loading.stopAnimating()
+                    self.content.isHidden=false
                     self.content.reloadData();
                 }
-            }
             }.resume();
         // Do any additional setup after loading the view.
     }
@@ -50,22 +61,25 @@ class MyActivityController: UIViewController,UITableViewDelegate,UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+       
         let activityCell = content.dequeueReusableCell(withIdentifier: "activity") as! ActivityCell
         activityCell.title.text=activities[indexPath.row].title;
-        activityCell.time.text=activities[indexPath.row].times
-        activityCell.location.text=activities[indexPath.row].place;
-        activityCell.img.downloadedFrom(link: "http://jhapp.com.au/"+activities[indexPath.row].img)
+        activityCell.time.text = activities[indexPath.row].start_time+" - "+activities[indexPath.row].end_time;
+        activityCell.location.text = activities[indexPath.row].address;
+        let topLink="https://app.meljianghu.com/storage/"+activities[indexPath.row].img_url_top
+        activityCell.img.downloadedFrom(url: topLink)
         activityCell.img.contentMode = .scaleAspectFill
         activityCell.headImg.layer.cornerRadius=activityCell.headImg.frame.height/2;
+        activityCell.tagLable.text = activities[indexPath.row].cate_name;
         return activityCell;
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+            if editingStyle == .delete {
             self.activities.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

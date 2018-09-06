@@ -9,6 +9,9 @@
 import UIKit
 
 class JoinedActivityController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+    @IBOutlet weak var joinedActivity: UITableView!
+    var activities = [Activity]();
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return activities.count
     }
@@ -16,11 +19,13 @@ class JoinedActivityController: UIViewController,UITableViewDelegate,UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let activityCell = content.dequeueReusableCell(withIdentifier: "activity") as! ActivityCell
         activityCell.title.text=activities[indexPath.row].title;
-        activityCell.time.text=activities[indexPath.row].times
-        activityCell.location.text=activities[indexPath.row].place;
-        activityCell.img.downloadedFrom(link: "http://jhapp.com.au/"+activities[indexPath.row].img)
+        activityCell.time.text = activities[indexPath.row].start_time+" - "+activities[indexPath.row].end_time;
+        activityCell.location.text = activities[indexPath.row].address;
+        let topLink="https://app.meljianghu.com/storage/"+activities[indexPath.row].img_url_top
+        activityCell.img.downloadedFrom(url: topLink)
         activityCell.img.contentMode = .scaleAspectFill
         activityCell.headImg.layer.cornerRadius=activityCell.headImg.frame.height/2;
+        activityCell.tagLable.text = activities[indexPath.row].cate_name;
         // activityCell.hotButton.layer.cornerRadius=5;
         return activityCell;
     }
@@ -46,40 +51,53 @@ class JoinedActivityController: UIViewController,UITableViewDelegate,UITableView
         }
     }
     
-    var activities = [Activity]();
     
     
+    
+    @IBOutlet var loading: UIActivityIndicatorView!
     @IBOutlet weak var content: UITableView!
     override func viewDidLoad() {
         content.delegate=self
         content.dataSource=self
         super.viewDidLoad()
 
+        loading.isHidden=false
+        loading.startAnimating();
+        content.isHidden=true
         
-        
-        guard let url=URL(string: "http://jhapp.com.au/display_joined_activity.php") else{return}
+        guard let url=URL(string: "https://app.meljianghu.com/api/activity/get_by_joined") else{return}
         var request=URLRequest(url: url)
-        request.httpMethod="POST"
-        let para="user="+UserInfo.id;
-        request.httpBody=para.data(using: String.Encoding.utf8);
+        request.httpMethod="GET"
+        let headers = [ "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Bearer"+" " + UserInfo.token ]
+        request.allHTTPHeaderFields = headers
         let session=URLSession.shared
         session.dataTask(with: request) { (data, response, error) in
             if let data=data{
                 do{
+                    let printString=String(data: data, encoding: String.Encoding.utf8)
+                    print(printString)
                     self.activities=try JSONDecoder().decode([Activity].self, from: data)
                     
                 }catch{
                     print(error);
                 }
-                
             }
             DispatchQueue.main.async {
+                self.loading.isHidden=true
+                self.loading.stopAnimating()
+                self.content.isHidden=false
                 self.content.reloadData();
             }
         }.resume();
         // Do any additional setup after loading the view.
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

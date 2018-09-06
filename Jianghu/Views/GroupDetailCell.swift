@@ -10,6 +10,12 @@ import UIKit
 
 class GroupDetailCell: UITableViewCell {
 
+    @IBOutlet weak var myMessages: UILabel!
+    @IBOutlet weak var triangleyellow: UIImageView!
+    @IBOutlet weak var myHead: UIImageView!
+    @IBOutlet weak var othersMessages: UILabel!
+    @IBOutlet weak var trianglewhite: UIImageView!
+    @IBOutlet weak var otherHeads: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

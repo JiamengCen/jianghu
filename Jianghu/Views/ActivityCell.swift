@@ -11,9 +11,9 @@ import UIKit
 class ActivityCell: UITableViewCell {
 
     
+    @IBOutlet var tagLable: UILabel!
     @IBOutlet weak var img: UIImageView!
     @IBOutlet weak var title: UILabel!
-
     @IBOutlet weak var headImg: UIImageView!
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var location: UILabel!

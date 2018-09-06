@@ -1,0 +1,6 @@
+framework module Pods_Jianghu {
+  umbrella header "Pods-Jianghu-umbrella.h"
+
+  export *
+  module * { export * }
+}

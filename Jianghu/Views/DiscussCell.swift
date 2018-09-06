@@ -10,6 +10,10 @@ import UIKit
 
 class DiscussCell: UITableViewCell {
 
+    @IBOutlet weak var title: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var ImageHead: UIImageView!
+    @IBOutlet weak var message: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

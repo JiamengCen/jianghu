@@ -10,6 +10,10 @@ import UIKit
 
 class GroupDiscriptionViewController: UIViewController {
 
+    @IBOutlet weak var groupDiscription: UIView!
+    @IBOutlet weak var groupName: UILabel!
+    @IBOutlet weak var joinGroup: UIButton!
+    @IBOutlet weak var backgroundImg: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -22,6 +26,21 @@ class GroupDiscriptionViewController: UIViewController {
     }
     
 
+    @IBAction func start_chat(_ sender: Any) {
+        performSegue(withIdentifier: "chat", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination=segue.destination as? ContactViewController{
+            if(UserInfo.myInfo?.id==2){
+                destination.another_user_id = "1";
+            }
+            else{
+                destination.another_user_id = "2";
+            }
+            
+        }
+    }
     /*
     // MARK: - Navigation
 

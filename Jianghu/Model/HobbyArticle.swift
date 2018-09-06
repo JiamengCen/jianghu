@@ -10,13 +10,15 @@ import Foundation
 
 struct HobbyArticle:Decodable {
     let content:String;
-    let id :String;
-    let img:String;
-    let tag1:String;
-    let tag2:String;
-    let title:String;
+    let id :Int;
+    let image_url:String;
+    let collection_id:String;
+    let cate_id:String;
     let user_id:String;
-    let user_name:String;
-    let img_num:String?
-    
+    let comments:[Comment];
+    let created_at:String;
+    let user_name: String?;
+    let collection_name:String?
+    let cate_name:String?
+    let likes:Int
 }

@@ -10,9 +10,10 @@ import UIKit
 
 class MyHobbyController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     var hobbyArticles=[HobbyArticle]();
-    
+    @IBOutlet var loading: UIActivityIndicatorView!
     @IBOutlet weak var content: UITableView!
     
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return hobbyArticles.count
     }
@@ -26,14 +27,14 @@ class MyHobbyController: UIViewController,UITableViewDataSource,UITableViewDeleg
         imgs.append(cell.img4)
         imgs.append(cell.img5)
         imgs.append(cell.img6)
-        cell.user.text = hobbyArticles[indexPath.row].user_name
+        //cell.user.text = hobbyArticles[indexPath.row].user_name
         cell.content.text=hobbyArticles[indexPath.row].content
-        cell.tag2.text=hobbyArticles[indexPath.row].tag2
-        cell.tag2.layer.cornerRadius=cell.frame.height/10;
-        let link="http://jhapp.com.au/"+hobbyArticles[indexPath.row].img
-        let imgCount=Int(hobbyArticles[indexPath.row].img_num!);
+       // cell.tag2.text=hobbyArticles[indexPath.row].tag2
+        cell.cate.layer.cornerRadius=cell.frame.height/10;
+      //  let link="http://jhapp.com.au/"+hobbyArticles[indexPath.row].img
+      //  let imgCount=Int(hobbyArticles[indexPath.row].img_num!);
         let totalImageView=6;
-        if(imgCount!<4){
+       /* if(imgCount!<4){
             cell.imgStack2.isHidden=true;
             cell.totalStackHeight.constant=90
             
@@ -53,7 +54,7 @@ class MyHobbyController: UIViewController,UITableViewDataSource,UITableViewDeleg
                 
             }
             i=i+1
-        }
+        }*/
         //cell.img.downloadedFrom(link:defualtLink+addLink)
         return cell
     }
@@ -70,13 +71,11 @@ class MyHobbyController: UIViewController,UITableViewDataSource,UITableViewDeleg
     
      func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            
-            
-            guard let url=URL(string: "http://jhapp.com.au/deleteHobby.php") else{return}
+            guard let url=URL(string: "https://jhapp.com.au/deleteHobby.php") else{return}
             var request=URLRequest(url: url)
             request.httpMethod="POST"
-            let para="user="+UserInfo.id+"&article="+self.hobbyArticles[indexPath.row].id;
-            request.httpBody=para.data(using: String.Encoding.utf8);
+          //  let para="user="+UserInfo.id+"&article="+self.hobbyArticles[indexPath.row].id;
+          //  request.httpBody=para.data(using: String.Encoding.utf8);
             let session=URLSession.shared
             session.dataTask(with: request) { (data, response, error) in
                 if let data=data{
@@ -98,22 +97,25 @@ class MyHobbyController: UIViewController,UITableViewDataSource,UITableViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        guard let url = URL(string:"http://jhapp.com.au/displayUserHobby.php"+"?id="+UserInfo.id) else {
+        loading.isHidden=false
+        loading.startAnimating();
+        content.isHidden=true
+        guard let url = URL(string:"https://jhapp.com.au/displayUserHobby.php"+"?id="+UserInfo.token) else {
             return
         }
         let session=URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
 
             if let data=data{
-                let printString=String(data: data, encoding: String.Encoding.utf8)
                 do{
                     self.hobbyArticles=try JSONDecoder().decode([HobbyArticle].self, from: data)
                 }catch{
                     print(error);
                 }
                 DispatchQueue.main.async {
+                    self.loading.isHidden=true
+                    self.loading.stopAnimating()
+                    self.content.isHidden=false
                     self.content.reloadData();
                 }
             }
