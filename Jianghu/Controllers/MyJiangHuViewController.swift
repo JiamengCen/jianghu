@@ -22,6 +22,7 @@ class MyJiangHuViewController: UIViewController,UITableViewDelegate,UITableViewD
     @IBOutlet weak var userHead: UIImageView!
     var ifHide=false;
     var initialBackImgTop:CGFloat?;
+
     override func viewDidLoad() {
     userName.text=UserInfo.myInfo?.name
         myHobbyContent.dataSource = self;
@@ -38,7 +39,15 @@ class MyJiangHuViewController: UIViewController,UITableViewDelegate,UITableViewD
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if(UserInfo.token != ""){
+            return
+        }
+        else{
+            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+            self.show(viewChange!, sender: self)
+        }
         self.tabBarController?.tabBar.isHidden = false
+ 
     }
     
     func circularImage(userHead: UIImageView?){

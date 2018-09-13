@@ -13,26 +13,54 @@ class QRViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate 
     var layer=AVCaptureVideoPreviewLayer();
     var session=AVCaptureSession()
     override func viewDidLoad() {
-        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
+        //checkCamera()
+        //let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: .video);
         super.viewDidLoad()
         session=AVCaptureSession()
-        let captureDevice=AVCaptureDevice.default(for: .video)
-        do{
-            let input=try AVCaptureDeviceInput(device: captureDevice!)
-            session.addInput(input)
-        }
-        catch{
             
-        }
-        let output=AVCaptureMetadataOutput()
-        session.addOutput(output)
-        output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-        output.metadataObjectTypes=[AVMetadataObject.ObjectType.qr]
-        layer=AVCaptureVideoPreviewLayer(session: session)
-        layer.frame=view.layer.bounds
-        view.layer.addSublayer(layer)
-        session.startRunning()
+        let captureDevice=AVCaptureDevice.default(for: .video)
+         do{
+            let input=try AVCaptureDeviceInput(device: captureDevice!)
+                session.addInput(input)
+            }
+            catch{
+                
+            }
+            let output=AVCaptureMetadataOutput()
+            session.addOutput(output)
+            output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            output.metadataObjectTypes=[AVMetadataObject.ObjectType.qr]
+            layer=AVCaptureVideoPreviewLayer(session: session)
+            layer.frame=view.layer.bounds
+            view.layer.addSublayer(layer)
+            session.startRunning()
         // Do any additional setup after loading the view.
+    }
+
+    func checkCamera() {
+        let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        switch authStatus {
+        case .authorized: requestCameraPermission()
+        case .denied:()
+            DispatchQueue.main.async {
+                self.presentCameraSettings()
+            }
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video)  { success in
+                DispatchQueue.main.async {
+                    if success {
+                        print("Permission granted, proceed")
+                    }else{
+                        print("Permission denied")
+                    }
+                }
+            }
+        default: ()
+         DispatchQueue.main.async {
+            self.alertToEncourageCameraAccessInitially()
+        }
+       
+        }
     }
     
     func requestCameraPermission(){
@@ -41,9 +69,53 @@ class QRViewController: UIViewController,AVCaptureMetadataOutputObjectsDelegate 
         })
     }
     
+    func presentCameraSettings() {
+        let alertController = UIAlertController(title: "Error",
+                                                message: "Camera access is denied",
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .default))
+        alertController.addAction(UIAlertAction(title: "Settings", style: .cancel) { _ in
+            if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: { _ in
+                    // Handle
+                })
+            }
+        })
+        
+        present(alertController, animated: true)
+    }
+    
+    func alertToEncourageCameraAccessInitially(){
+        let alert = UIAlertController(
+            title: "IMPORTANT",
+            message: "Camera access required for capturing photos!",
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Allow Camera", style: .cancel) { _ in
+            if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.open(url, options: [:], completionHandler: { _ in
+                    // Handle
+                })
+            }
+        })
+        present(alert, animated: true, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if(UserInfo.token != ""){
+            return
+        }
+        else{
+            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+            self.show(viewChange!, sender: self)
+        }
     }
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
@@ -146,5 +218,44 @@ extension String {
         guard self.characters.count > 0 else { return false }
         let nums: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
         return Set(self.characters).isSubset(of: nums)
+    }
+}
+
+extension AVCaptureDevice {
+    enum AuthorizationStatus {
+        case justDenied
+        case alreadyDenied
+        case restricted
+        case justAuthorized
+        case alreadyAuthorized
+    }
+    
+    class func authorizeVideo(completion: ((AuthorizationStatus) -> Void)?) {
+        AVCaptureDevice.authorize(mediaType: AVMediaType.video.rawValue, completion: completion)
+    }
+    
+    class func authorizeAudio(completion: ((AuthorizationStatus) -> Void)?) {
+        AVCaptureDevice.authorize(mediaType: AVMediaType.audio.rawValue, completion: completion)
+    }
+    
+    private class func authorize(mediaType: String, completion: ((AuthorizationStatus) -> Void)?) {
+        let status = AVCaptureDevice.authorizationStatus(for: AVMediaType(rawValue: mediaType))
+        switch status {
+        case .authorized:
+            completion?(.alreadyAuthorized)
+        case .denied:
+            completion?(.alreadyDenied)
+        case .restricted:
+            completion?(.restricted)
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: AVMediaType(rawValue: mediaType), completionHandler: { (granted) in
+                if(granted) {
+                    completion?(.justAuthorized)
+                }
+                else {
+                    completion?(.justDenied)
+                }
+            })
+        }
     }
 }

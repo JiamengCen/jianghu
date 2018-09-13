@@ -13,7 +13,7 @@ class QRPageController: UIViewController {
     @IBOutlet weak var activityTitle: UILabel!
     
     @IBOutlet weak var congratulation: UILabel!
-    var activity:Activity?
+    var activity:JoinActivity?
     var basicInfo=[JoinedActivityInfo]();
     
     func generateQRCode(from string: String) -> UIImage? {

@@ -12,7 +12,7 @@ class CommentController: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var commentPost: UITextView!
     @IBOutlet weak var commentpost: UIButton!
     var hobby:HobbyArticle?
-  //  var comments = [Comment]();
+    //var comments = [Comment]();
     //var commentForPost = [Comment]();
     @IBOutlet weak var commentTableView: UITableView!
     @IBAction func sendComment(_ sender: Any) {
@@ -43,7 +43,6 @@ class CommentController: UIViewController,UITableViewDelegate,UITableViewDataSou
                                 let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "tab");
                                 self.present(viewChange!, animated:true, completion:nil)
                             }
-                            
                         }
                         
                     } catch{

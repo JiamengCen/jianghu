@@ -10,7 +10,7 @@ import UIKit
 
 class JoinedActivityController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     @IBOutlet weak var joinedActivity: UITableView!
-    var activities = [Activity]();
+    var activities = [JoinActivity]();
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return activities.count
@@ -78,7 +78,7 @@ class JoinedActivityController: UIViewController,UITableViewDelegate,UITableView
                 do{
                     let printString=String(data: data, encoding: String.Encoding.utf8)
                     print(printString)
-                    self.activities=try JSONDecoder().decode([Activity].self, from: data)
+                    self.activities=try JSONDecoder().decode([JoinActivity].self, from: data)
                     
                 }catch{
                     print(error);

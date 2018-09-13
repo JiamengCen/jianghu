@@ -122,6 +122,15 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
     
     
     override func viewDidLoad() {
+        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+        
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        loadingIndicator.startAnimating();
+        
+        alert.view.addSubview(loadingIndicator)
+        present(alert, animated: true, completion: nil)
         input.text = "请输入消息..."
         input.textColor = UIColor.lightGray
         input.delegate=self
@@ -159,16 +168,12 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
                     print(printString)
                     self.contact = try JSONDecoder().decode(Contact.self, from: data)
                     self.chat()
-                  
-                    
-                    
+
                 } catch{
                     print(error);
                 }
             }
             }.resume();
-        
-        
     }
     
     func chat(){
@@ -206,7 +211,7 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 return
             }
             print("Connected!")
-            
+            self.dismiss(animated: false, completion: nil)
             guard let currentUser = currentUser else { return }
             self.currentUser = currentUser
             
@@ -220,23 +225,8 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
-
-
 
 extension ContactViewController: PCChatManagerDelegate,PCRoomDelegate {
     func newMessage(message: PCMessage) {

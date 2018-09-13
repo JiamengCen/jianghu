@@ -28,6 +28,7 @@ class DisscussViewController: UIViewController,UITableViewDelegate,UITableViewDa
             self.group.isHidden=false
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         switchbar.initialization()
         if(UserInfo.token != ""){
@@ -109,8 +110,6 @@ class DisscussViewController: UIViewController,UITableViewDelegate,UITableViewDa
         return discussCell; */
         if(tableView==contactList){
             let contactlistCell = contactList.dequeueReusableCell(withIdentifier: "contactListCell") as! ContactListCell
-           
-                contactlistCell.loginLabel.isHidden=true
                 contactlistCell.userName.text = userInfoList[indexPath.row].name
                 let timeString=userInfoList[indexPath.row].created_at
                 let dateFormatter=DateFormatter()

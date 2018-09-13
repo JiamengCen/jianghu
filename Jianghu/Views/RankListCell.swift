@@ -16,9 +16,11 @@ class RankListCell: UITableViewCell {
     @IBOutlet weak var medal: UIImageView!
     @IBOutlet weak var creditNum: UILabel!
     
+   
     override func awakeFromNib() {
         medal.isHidden = true
         super.awakeFromNib()
+        self.creditLogo.isHidden=true
         // Initialization code
     }
 

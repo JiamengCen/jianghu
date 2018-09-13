@@ -10,6 +10,7 @@ import UIKit
 
 class GiftActivityController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource {
 
+    @IBOutlet weak var loading: UIActivityIndicatorView!
     @IBOutlet weak var giftCollectView: UICollectionView!
     @IBOutlet weak var giftTableView: UITableView!
     var activities = [Activity]()

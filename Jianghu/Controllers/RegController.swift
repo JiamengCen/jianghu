@@ -15,43 +15,81 @@ class RegController:UIViewController,UITextFieldDelegate{
     @IBOutlet weak var mail: UITextField!
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var password_confirm: UITextField!
+    
     @IBAction func register(_ sender: Any) {
+        
         if(!(nickname.text?.isEmpty)! && !(phone.text?.isEmpty)! && !(password.text?.isEmpty)! && !(mail.text?.isEmpty)!){
-            
-            let data=Register(name: nickname.text!, email:mail.text! , phone: phone.text!, password: password.text!)
-            let encoder=JSONEncoder();
-            encoder.outputFormatting = .prettyPrinted
-            let json=try? encoder.encode(data)
-            print(String(data: json!, encoding: .utf8)!)
-            guard let url=URL(string: "https://app.meljianghu.com/api/user/register") else{return}
-            let headers = [ "Content-Type": "application/json",
-                            "Accept": "application/json"]
-            var request=URLRequest(url: url)
-            request.httpMethod="POST"
-            let para=String(data: json!, encoding: .utf8)
-            request.httpBody = para!.data(using: String.Encoding.utf8);
-            request.allHTTPHeaderFields = headers;
-            let session=URLSession.shared
-            session.dataTask(with: request) { (data, response, error) in
-                if let data=data{
-                    do {
-                        let printString=String(data: data, encoding: String.Encoding.utf8)
-                        print(printString)
-                        DispatchQueue.main.async {
-                            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
-                            self.present(viewChange!, animated:true, completion:nil)
+         
+            print(validateEmail(enteredEmail: mail.text!))
+            if(((password.text?.count)!) >= 6) && ((phone.text?.count)! == 10) && (validateEmail(enteredEmail: (mail.text)!) &&
+                password.text == password_confirm.text){
+                let registerData=Register(name: nickname.text!, email:mail.text!, phone: phone.text!, password: password.text!, password_confirmation: password_confirm.text!)
+                let encoder=JSONEncoder();
+                encoder.outputFormatting = .prettyPrinted
+                let json=try? encoder.encode(registerData)
+                print(String(data: json!, encoding: .utf8)!)
+                guard let url=URL(string: "https://app.meljianghu.com/api/user/register") else{return}
+                let headers = [ "Content-Type": "application/json",
+                                "Accept": "application/json"]
+                var request=URLRequest(url: url)
+                request.httpMethod="POST"
+                let para=String(data: json!, encoding: .utf8)
+                request.httpBody = para!.data(using: String.Encoding.utf8);
+                request.allHTTPHeaderFields = headers;
+                let session=URLSession.shared
+                session.dataTask(with: request) { (data, response, error) in
+                    if let responseData=data{
+                        do {
+                            //let printString=String(data: data, encoding: String.Encoding.utf8)
+                            //print(printString)
+                            print(type(of: responseData))
+                            //let reply = try JSONDecoder().decode(Reply.self, from: data)
+                            guard let responseObj = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String:Any] else {
+                                print ("error")
+                                return
+                            }
+                            print(responseObj)
+                            print (type(of: responseObj))
+                            print(responseObj["message"])
+                            print(type(of: responseObj["message"]))
+                            if let messageStr = responseObj["message"] as? String {
+                                print(messageStr)
+                                if (messageStr == "success") {
+                                    print ("success")
+                                    DispatchQueue.main.async {
+                                        let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+                                        self.present(viewChange!, animated:true, completion:nil)
+                                    }
+                                } else {
+                                    DispatchQueue.main.async {
+                                         self.displayMyAlertMessage(userMesaage: messageStr)
+                                    }
+                                    print("failure")
+                                }
+                            }
                         }
-                    } catch{
-                        print(error);
-                        self.displayMyAlertMessage(userMesaage: error as! String)
+                        catch{
+                            print(error);
+                            DispatchQueue.main.async {
+                                self.displayMyAlertMessage(userMesaage: error as! String)
+                            }
+                        }
                     }
-                }
-                }.resume();
-        }
-        else{
+                    }.resume();
+            }
+            else{
+                self.displayMyAlertMessage(userMesaage: "请确认号码为10位|请确认密码大于6位|请确认密码一致")
+            }
+            } else {
             self.displayMyAlertMessage(userMesaage: "所填信息不能为空")
         }
-        
+    }
+    
+    func validateEmail(enteredEmail:String) -> Bool {
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        return emailPredicate.evaluate(with: enteredEmail)
     }
     
     func showAlert() {
@@ -108,6 +146,7 @@ class RegController:UIViewController,UITextFieldDelegate{
         nickname.delegate=self
         phone.delegate=self
         password.delegate=self
+        password_confirm.delegate=self
     }
 }
 

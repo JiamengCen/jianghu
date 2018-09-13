@@ -20,7 +20,7 @@ class ActivityDetailController: UIViewController {
     @IBOutlet weak var place: UILabel!
     @IBOutlet weak var time: UILabel!
     //private var customView: UIView!
-    
+    //var myActivity:JoinActivity?
     var activity:Activity?
     override func viewDidLoad() {
         activityTitle.text = (activity?.title)!

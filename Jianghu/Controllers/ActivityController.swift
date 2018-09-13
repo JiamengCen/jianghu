@@ -15,6 +15,7 @@
 
 import UIKit
 
+
 class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource{
     
     @IBOutlet weak var subActivityNav: UICollectionView!
@@ -22,9 +23,10 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet var segmentedView: CustomizeSegmentedControl!
     @IBOutlet weak var activityNavView: UICollectionView!
     @IBOutlet weak var activityView: UITableView!
+   // var refresher:UIRefreshControl!
     var if_big=false;
     var activities = [Activity]();
-    //var collections:[Collection]=Array<Collection>();
+    //var collections:[/*]=Array<Collection>();
     var cates:[Cate]=Array<Cate>();
     var activity_type="1";
     
@@ -70,8 +72,12 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
             //border.borderWidth = borderWidth
             //cell.layer.addSublayer(border)
             cell.name.textColor=UIColor.red
+            loading.startAnimating()
+            loading.isHidden=false
         }
         else{
+            print(indexPath.row);
+            print(cates.count)
             loadActivityByCateID(activity_id: String(cates[indexPath.row].id), type: activity_type)
             activityView.reloadData();
             
@@ -84,7 +90,9 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        //print(activities.count)
+       // print(indexPath.row)
+       // print("xxxxxxxxxxxx")
         let activityCell = activityView.dequeueReusableCell(withIdentifier: "activity") as! ActivityCell
         activityCell.title.text = activities[indexPath.row].title;
         activityCell.time.text = activities[indexPath.row].start_time+" - "+activities[indexPath.row].end_time;
@@ -99,6 +107,8 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        loading.startAnimating()
+        loading.isHidden=false
         performSegue(withIdentifier: "showActivityDetail", sender: self)
     }
     
@@ -132,8 +142,8 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBAction func GoToActivtyUpload(_ sender: Any) {
         if (UserInfo.token != "") {
             performSegue(withIdentifier: "uploadActivity", sender: self)
-            
             //self.present(viewChange!, animated:true, completion:nil)
+            
         }
         else{
             let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
@@ -141,22 +151,17 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
         }
     }
     
+   
     override func viewWillAppear(_ animated: Bool) {
-        loading.isHidden = false
-        loading.startAnimating()
         
-        activityView.isHidden = true
-        //loadAction(activity_id: "0",type: "1")
-        cates=Globals.getCateByCollectionID(collection_id: "1");
-        loadActivityByCateID(activity_id: "1", type: activity_type)
         
-        for index in self.activityNavView.indexPathsForVisibleItems{
+        /*for index in self.activityNavView.indexPathsForVisibleItems{
             let allCellItem=self.activityNavView.cellForItem(at: index) as!activityNavCell
             allCellItem.name.textColor=UIColor.black
             if((allCellItem.layer.sublayers?.count)!>1){
                 allCellItem.layer.sublayers![1].removeFromSuperlayer()
             }
-        }
+        }*/
        // loadActivities(cate_id: "1");
         //loadHobbies(cate_id:"1");
         
@@ -226,8 +231,7 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
             }
             
             }.resume();
-    }
- */
+    } */
     
     
     func loadActivityByCateID(activity_id: String,type: String){
@@ -287,7 +291,15 @@ class ActivityController:UIViewController,UITableViewDelegate,UITableViewDataSou
         activityNavView.dataSource=self;
         subActivityNav.delegate=self
         subActivityNav.dataSource=self
+        
         super.viewDidLoad()
+        loading.isHidden = false
+        loading.startAnimating()
+        
+        activityView.isHidden = true
+        cates=Globals.getCateByCollectionID(collection_id: "1");
+        subActivityNav.reloadData()
+        loadActivityByCateID(activity_id: "1", type: activity_type)
 
     }
     

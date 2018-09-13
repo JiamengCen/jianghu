@@ -144,6 +144,16 @@ class GiftDetailController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if(UserInfo.token != ""){
+            return
+        }
+        else{
+            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+            self.show(viewChange!, sender: self)
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

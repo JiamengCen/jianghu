@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Photos
 class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextViewDelegate {
     
     var selectedCateID = -1;
@@ -239,6 +239,7 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
     }
     
     override func viewDidLoad() {
+        photoStatus()
         cate.dataSource=self
         cate.delegate=self
         cate.layer.zPosition=11;
@@ -289,5 +290,37 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
         }
         
     }
+    
+    func photoStatus(){
+        let status = PHPhotoLibrary.authorizationStatus()
+        if( status == .authorized){
+        }
+        else if (status == .restricted || status == .denied){
+            let alertController = UIAlertController(title: "提示",
+                                                    message: "需要允许访问相册权限方可上传图片",
+                                                    preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "取消", style: .default))
+            alertController.addAction(UIAlertAction(title: "去设置", style: .cancel) { _ in
+                if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: { _ in
+                        // Handle
+                    })
+                }
+            })
+            present(alertController, animated: true)
+        }
+        else if (status == .notDetermined){  //首次使用
+            PHPhotoLibrary.requestAuthorization({  (firstStatus) in
+                let isTrue = (firstStatus == .authorized)
+                if isTrue {
+                    print("首次允许")
+                    
+                } else {
+                    print("首次不允许")
+                }
+            })
+        }
+    }
+    
     
 }

@@ -9,13 +9,36 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        /*if (AVCaptureDevice.authorizationStatus(for: AVMediaType.video) == .notDetermined) {
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { (statusFirst) in
+                if statusFirst {
+                    //用户首次允许
+                    print("允许APP访问相机")
+                } else {
+                    //用户首次拒接
+                    print("拒绝APP访问相机")
+                }
+            })
+        }
+        
+        //MARK: APP启动时候，判断用户是否授权使用相册
+        if (PHPhotoLibrary.authorizationStatus() == .notDetermined) {
+            PHPhotoLibrary.requestAuthorization({ (firstStatus) in
+                let result = (firstStatus == .authorized)
+                if result {
+                    print("允许APP访问相册")
+                } else {
+                    print("拒绝APP访问相册")
+                }
+            })
+        }*/
         return true
     }
 
@@ -40,7 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+ 
 }
 

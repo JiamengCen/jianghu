@@ -10,6 +10,7 @@ import UIKit
 
 class ServiceViewController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource {
 
+    @IBOutlet weak var loading: UIActivityIndicatorView!
     var serviceActivities = [Activity]();
     var cates:[Cate]=Array<Cate>();
     @IBOutlet weak var serviceCollectionView: UICollectionView!

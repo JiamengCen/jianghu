@@ -10,7 +10,6 @@ import UIKit
 
 class ContactListCell: UITableViewCell {
 
-    @IBOutlet weak var loginLabel: UILabel!
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var useImg: UIImageView!

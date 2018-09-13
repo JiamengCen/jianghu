@@ -21,6 +21,8 @@
 		602B73FD211ABBCF00FDDF64 /* ContactListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B73FC211ABBCF00FDDF64 /* ContactListCell.swift */; };
 		602B73FF211ACFD600FDDF64 /* ActivityComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B73FE211ACFD600FDDF64 /* ActivityComment.swift */; };
 		602B7401211AD04400FDDF64 /* ActivityLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B7400211AD04400FDDF64 /* ActivityLike.swift */; };
+		604797E921426331000854D5 /* FindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604797E821426331000854D5 /* FindViewController.swift */; };
+		604797EB21429B34000854D5 /* JoinActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 604797EA21429B34000854D5 /* JoinActivity.swift */; };
 		6075FDCF20FC3D8E00D45B01 /* GiftActivityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6075FDCE20FC3D8E00D45B01 /* GiftActivityController.swift */; };
 		6075FDD120FC656100D45B01 /* MyJiangHuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6075FDD020FC656100D45B01 /* MyJiangHuViewController.swift */; };
 		6075FDD320FDBB4500D45B01 /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6075FDD220FDBB4500D45B01 /* CreditsViewController.swift */; };
@@ -124,6 +126,8 @@
 		602B73FC211ABBCF00FDDF64 /* ContactListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListCell.swift; sourceTree = "<group>"; };
 		602B73FE211ACFD600FDDF64 /* ActivityComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityComment.swift; sourceTree = "<group>"; };
 		602B7400211AD04400FDDF64 /* ActivityLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityLike.swift; sourceTree = "<group>"; };
+		604797E821426331000854D5 /* FindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindViewController.swift; sourceTree = "<group>"; };
+		604797EA21429B34000854D5 /* JoinActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinActivity.swift; sourceTree = "<group>"; };
 		6075FDCE20FC3D8E00D45B01 /* GiftActivityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftActivityController.swift; sourceTree = "<group>"; };
 		6075FDD020FC656100D45B01 /* MyJiangHuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyJiangHuViewController.swift; sourceTree = "<group>"; };
 		6075FDD220FDBB4500D45B01 /* CreditsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsViewController.swift; sourceTree = "<group>"; };
@@ -198,7 +202,7 @@
 		CCD3307E210F5136004462D9 /* MyContactViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyContactViewCell.swift; sourceTree = "<group>"; };
 		CCD33080210FD739004462D9 /* ActivityUpload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityUpload.swift; sourceTree = "<group>"; };
 		CCEDAE512061DB750083FBE2 /* Jianghu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jianghu.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CCEDAE542061DB760083FBE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CCEDAE542061DB760083FBE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		CCEDAE562061DB760083FBE2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		CCEDAE592061DB760083FBE2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CCEDAE5B2061DB760083FBE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -285,6 +289,7 @@
 				60B6732C2117D6AC00E1F7C8 /* ImagePreviewVC.swift */,
 				60B6732E2117D71700E1F7C8 /* ImagePreviewCell.swift */,
 				602B73F221186B1100FDDF64 /* TopicCommentController.swift */,
+				604797E821426331000854D5 /* FindViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -352,6 +357,7 @@
 				602B73F8211A84C700FDDF64 /* HobbyLike.swift */,
 				602B73FE211ACFD600FDDF64 /* ActivityComment.swift */,
 				602B7400211AD04400FDDF64 /* ActivityLike.swift */,
+				604797EA21429B34000854D5 /* JoinActivity.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -526,6 +532,7 @@
 				60C699FE2109E8E500E83D7C /* Token.swift in Sources */,
 				60C699FA2109DA1300E83D7C /* CommentController.swift in Sources */,
 				CC8A544A20AB545700EA840F /* QRCell.swift in Sources */,
+				604797E921426331000854D5 /* FindViewController.swift in Sources */,
 				CC758C9D2085E70200328885 /* LoginController.swift in Sources */,
 				602B73FD211ABBCF00FDDF64 /* ContactListCell.swift in Sources */,
 				60C699EC21097E0200E83D7C /* ServiceCell.swift in Sources */,
@@ -574,6 +581,7 @@
 				60290423210087930060DA73 /* DiscussGroupViewController.swift in Sources */,
 				CCD3307F210F5137004462D9 /* MyContactViewCell.swift in Sources */,
 				60B6732F2117D71700E1F7C8 /* ImagePreviewCell.swift in Sources */,
+				604797EB21429B34000854D5 /* JoinActivity.swift in Sources */,
 				CC8A544620AAF51500EA840F /* QRViewController.swift in Sources */,
 				6095D7C9210F19A100987F8E /* ContactTableViewCell.swift in Sources */,
 				6029041D210062510060DA73 /* RankListCell.swift in Sources */,

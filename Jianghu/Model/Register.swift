@@ -13,4 +13,5 @@ struct Register:Codable{
     let email: String;
     let phone :String;
     let password: String;
+    let password_confirmation: String;
 }

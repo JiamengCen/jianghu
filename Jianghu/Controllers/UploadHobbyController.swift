@@ -1,6 +1,7 @@
 
 
 import UIKit
+import Photos
 
 class UploadHobbyController:UIViewController,UIPickerViewDelegate,UIPickerViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UITextViewDelegate{
     //var reply = Reply(message)
@@ -204,7 +205,10 @@ class UploadHobbyController:UIViewController,UIPickerViewDelegate,UIPickerViewDa
         uploadButton.isUserInteractionEnabled=true;
     }
     
+    
+    
     override func viewDidLoad() {
+        photoStatus()
         cateTextField.delegate=self;
         hobbyTextField.delegate=self;
         hobbyTextField.isUserInteractionEnabled=false
@@ -222,6 +226,37 @@ class UploadHobbyController:UIViewController,UIPickerViewDelegate,UIPickerViewDa
       //  contentView.layer.borderColor=UIColor.lightGray.cgColor;
       //  contentView.layer.cornerRadius=contentView.frame.height/6;
         super.viewDidLoad()
+    }
+    
+    func photoStatus(){
+        let status = PHPhotoLibrary.authorizationStatus()
+        if( status == .authorized){
+        }
+        else if (status == .restricted || status == .denied){
+            let alertController = UIAlertController(title: "提示",
+                                                    message: "需要允许访问相册权限方可上传图片",
+                                                    preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "取消", style: .default))
+            alertController.addAction(UIAlertAction(title: "去设置", style: .cancel) { _ in
+                if let url = URL(string: UIApplicationOpenSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: { _ in
+                        // Handle
+                    })
+                }
+            })
+            present(alertController, animated: true)
+        }
+        else if (status == .notDetermined){  //首次使用
+            PHPhotoLibrary.requestAuthorization({  (firstStatus) in
+                let isTrue = (firstStatus == .authorized)
+                if isTrue {
+                    print("首次允许")
+                    
+                } else {
+                    print("首次不允许")
+                }
+            })
+        }
     }
 }
 

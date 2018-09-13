@@ -2,12 +2,13 @@
 import UIKit
 import SDWebImage
 
-class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource {
+
+class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource{
     
    // var currentSelectedIndexPath:IndexPath?;
     func startChat(){
         let alertController = UIAlertController(title: "联系人",
-                                                message: "",
+                                                message: nil,
                                                 preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: "发送消息", style: .default) { _ in
             self.performSegue(withIdentifier: "showContact", sender: self)
@@ -469,15 +470,16 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
     @IBAction func GotoHobbyWrite(_ sender: Any) {
         if(UserInfo.token != ""){
             let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "uploadHobby");
-            self.show(viewChange!, sender: self)
-            //self.present(viewChange!, animated:true, completion:nil)
+            self.show(viewChange!, sender: self) //会有back符号
+            //self.present(viewChange!, animated:true, completion:nil) 会没有back符号
         }
         else{
             let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
             self.show(viewChange!, sender: self)
         }
     }
-    
+
+   
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (scrollView.contentOffset.y > 50){
             if(self.ifHide==false){
@@ -555,7 +557,6 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
     @objc func reloadHobbies(){
         loadHobbies(cate_id: currentCateId)
         hobbyContent.reloadData()
-        print("xxxxxxxxxx");
         refresher.endRefreshing();
     }
     

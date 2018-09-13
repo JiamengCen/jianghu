@@ -9,8 +9,6 @@
 import UIKit
 
 class RankListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
-   
-    
 
     @IBOutlet weak var rankListTableView: UITableView!
     //var ranklist = [RankList]()
@@ -24,8 +22,6 @@ class RankListViewController: UIViewController,UITableViewDelegate,UITableViewDa
         // Do any additional setup after loading the view.
         
     }
-    
-    
     
     func circularImage(userHeadTop: UIImageView?){
         //userHead!.layer.frame = CGRectInset(userHead!.layer.frame, 0, 0)
@@ -51,6 +47,7 @@ class RankListViewController: UIViewController,UITableViewDelegate,UITableViewDa
         rankCell.creditNum.text = userList[indexPath.row].points;
         rankCell.userHead.layer.cornerRadius=rankCell.userHead.frame.height/2
         rankCell.userHead.layer.masksToBounds=true
+        rankCell.creditNum.isHidden=true
         //let cell = rankListTableView.cellForRow(at: indexPath) as! HobbyTableViewCell
         if(indexPath.row == 0){
             rankCell.medal.image=UIImage(named: "1")

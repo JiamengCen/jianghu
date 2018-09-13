@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>2.0</string>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>3</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -30,7 +30,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This APP wants to use the camera to scan QR.</string>
+	<string>江湖需要访问您的相机扫二维码</string>
+    
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>江湖需要访问您的相册上传图片</string>
+    
 	<key>UIAppFonts</key>
 	<array>
 		<string>PingFangSC-Regular.ttf</string>

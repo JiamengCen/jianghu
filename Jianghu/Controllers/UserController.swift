@@ -12,28 +12,31 @@ class UserController: UIViewController {
 
     @IBOutlet weak var userName: UILabel!
     
-    @IBOutlet weak var loginout: UIButton!
+   // @IBOutlet weak var loginout: UIButton!
     @IBOutlet weak var plzLogin: UIButton!
-    @IBAction func LoginOut(_ sender: Any) {
+    
+   /* @IBAction func LoginOut(_ sender: Any) {
         UserInfo.myInfo=nil
         UserInfo.token=""
         let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "tab");
         self.present(viewChange!, animated:true, completion:nil)
-    }
+    }*/
+    
     @IBAction func pleaseLogin(_ sender: Any) {
         if(UserInfo.token != ""){
             return
-        }
-        else{
+        }else{
             let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
             self.show(viewChange!, sender: self)
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.userName.text = UserInfo.myInfo?.name
         // Do any additional setup after loading the view.
     }
+ 
 
     @IBAction func goToMyActivity(_ sender: Any) {
         if(UserInfo.token != ""){
@@ -49,17 +52,24 @@ class UserController: UIViewController {
     
     @IBAction func goToJoinedActivity(_ sender: Any) {
         if(UserInfo.token != ""){
-            
             performSegue(withIdentifier: "goToJoinedActivity", sender: self)
         }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
+        if(UserInfo.token != ""){
+            return
+        }
+        else{
+            let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+            self.show(viewChange!, sender: self)
+        }
+        
         if(UserInfo.token != ""){
             plzLogin.isHidden=true
             userName.text=UserInfo.myInfo?.name
