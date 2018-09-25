@@ -60,7 +60,6 @@ class JoinedActivityController: UIViewController,UITableViewDelegate,UITableView
         content.delegate=self
         content.dataSource=self
         super.viewDidLoad()
-
         loading.isHidden=false
         loading.startAnimating();
         content.isHidden=true

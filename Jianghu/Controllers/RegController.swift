@@ -16,7 +16,7 @@ class RegController:UIViewController,UITextFieldDelegate{
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var password_confirm: UITextField!
-    
+    var responseObj = Dictionary<String, String>()
     @IBAction func register(_ sender: Any) {
         
         if(!(nickname.text?.isEmpty)! && !(phone.text?.isEmpty)! && !(password.text?.isEmpty)! && !(mail.text?.isEmpty)!){
@@ -41,10 +41,27 @@ class RegController:UIViewController,UITextFieldDelegate{
                 session.dataTask(with: request) { (data, response, error) in
                     if let responseData=data{
                         do {
-                            //let printString=String(data: data, encoding: String.Encoding.utf8)
-                            //print(printString)
+                            
+                           
+                        /*let responseObj = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String:Any]
+                            
+                            let printString=String(data: responseData, encoding: String.Encoding.utf8)
+                            print(printString)
                             print(type(of: responseData))
-                            //let reply = try JSONDecoder().decode(Reply.self, from: data)
+                            let reply = try JSONDecoder().decode(Reply.self, from: responseData)
+                            if(reply.message=="success"){
+                                print("success")
+                                DispatchQueue.main.async {
+                                    let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+                                    self.present(viewChange!, animated:true, completion:nil)
+                                }
+                            }
+                            else{
+                                print("unsuccess")
+                                DispatchQueue.main.async {
+                                     self.displayMyAlertMessage(userMesaage: "电话用户已存在")
+                                }
+                            }*/
                             guard let responseObj = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String:Any] else {
                                 print ("error")
                                 return
@@ -57,29 +74,48 @@ class RegController:UIViewController,UITextFieldDelegate{
                                 print(messageStr)
                                 if (messageStr == "success") {
                                     print ("success")
+                                 
                                     DispatchQueue.main.async {
-                                        let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
-                                        self.present(viewChange!, animated:true, completion:nil)
+                                        let alertController: UIAlertController = UIAlertController(title: "注册信息", message: "注册成功", preferredStyle: .alert)
+                                        
+                                        let okAction: UIAlertAction = UIAlertAction(title: "OK", style: .default) { action -> Void in
+                                            
+                                            //Redirect to new viewcontroler
+                                          let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
+                                            self.present(viewChange!, animated:true, completion:nil)
+                                        }
+                                        
+                                        alertController.addAction(okAction)
+                                        self.present(alertController, animated: true, completion: nil)
                                     }
-                                } else {
+                                } else{
                                     DispatchQueue.main.async {
-                                         self.displayMyAlertMessage(userMesaage: messageStr)
+                                         self.displayMyAlertMessage(userMesaage:
+                                            messageStr )
+                                         print()
                                     }
                                     print("failure")
                                 }
+                            }else{
+                                //print("errorrrrrr")
+                                //let messageStr = responseObj["message"] as? String 显示为空
+                                //print(messageStr)
+                                DispatchQueue.main.async {
+                                    self.displayMyAlertMessage(userMesaage:
+                                        "用户号码已存在|邮箱已被注册" )
+                                }
                             }
-                        }
-                        catch{
+                        }catch{
                             print(error);
                             DispatchQueue.main.async {
-                                self.displayMyAlertMessage(userMesaage: error as! String)
+                                self.displayMyAlertMessage(userMesaage: self.responseObj["message"]!)
                             }
                         }
                     }
                     }.resume();
             }
             else{
-                self.displayMyAlertMessage(userMesaage: "请确认号码为10位|请确认密码大于6位|请确认密码一致")
+                self.displayMyAlertMessage(userMesaage: "请确认号码为10位|密码需大于6位|密码需一致|邮箱格式需正确")
             }
             } else {
             self.displayMyAlertMessage(userMesaage: "所填信息不能为空")
@@ -130,7 +166,7 @@ class RegController:UIViewController,UITextFieldDelegate{
     }
     
     func displayMyAlertMessage(userMesaage:String){
-        var myAlert = UIAlertController(title:"提示",message:userMesaage,preferredStyle:UIAlertControllerStyle.alert);
+        let myAlert = UIAlertController(title:"提示",message:userMesaage,preferredStyle:UIAlertControllerStyle.alert);
         let okAction = UIAlertAction(title:"Ok",style:UIAlertActionStyle.default,handler:nil);
         myAlert.addAction(okAction)
         self.present(myAlert,animated:true,completion:nil)

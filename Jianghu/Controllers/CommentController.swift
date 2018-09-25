@@ -17,7 +17,7 @@ class CommentController: UIViewController,UITableViewDelegate,UITableViewDataSou
     @IBOutlet weak var commentTableView: UITableView!
     @IBAction func sendComment(_ sender: Any) {
         if(commentPost.text != ""){
-            let data=Comment(content: commentPost.text!, id: 0, user_id: hobby!.user_id, hobby_id: String(hobby!.id) , target_user: hobby!.user_id, user_name: "", target_user_name: "", created_at:"")
+            let data=Comment(content: commentPost.text!, id: 0, user_id: hobby!.user_id, hobby_id: String(hobby!.id) , target_user: hobby!.user_id, user_name: (UserInfo.myInfo?.name)!, target_user_name: "", created_at:"") //之前是user_name:""
             let encoder=JSONEncoder();
             encoder.outputFormatting = .prettyPrinted
             let json=try? encoder.encode(data)
@@ -95,7 +95,7 @@ class CommentController: UIViewController,UITableViewDelegate,UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let commentCell = commentTableView.dequeueReusableCell(withIdentifier: "commentCell") as! CommentTableViewCell
        // comments = hobbyArticles[indexPath.row].comments
-         commentCell.userName.text = hobby!.comments[indexPath.row].target_user_name;
+         commentCell.userName.text = hobby!.comments[indexPath.row].user_name;
         //commentCell.userImg. = comments[indexPath.row].target_user;
         commentCell.comment.text = hobby!.comments[indexPath.row].content;
         let timeString=hobby!.comments[indexPath.row].created_at

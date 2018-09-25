@@ -10,6 +10,8 @@ import UIKit
 
 class HobbyTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var repostLabel: UILabel!
+    @IBOutlet weak var repostImg: UIImageView!
     @IBOutlet weak var chatButton: UIButton!
     
     @IBOutlet weak var likeText: UILabel!
@@ -41,6 +43,7 @@ class HobbyTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cate: UILabel!
     
+    @IBOutlet weak var reportButton: UIButton!
     
     @IBOutlet weak var img6: UIImageView!
     @IBOutlet weak var img5: UIImageView!
@@ -56,7 +59,6 @@ class HobbyTableViewCell: UITableViewCell {
     @IBOutlet weak var commentButton: UIButton!
     
     
-
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

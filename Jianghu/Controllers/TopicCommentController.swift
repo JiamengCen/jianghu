@@ -9,16 +9,14 @@
 import UIKit
 
 class TopicCommentController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextViewDelegate {
-    
 
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (topicActivity?.comments.count)!
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let commentCell = topicComment.dequeueReusableCell(withIdentifier: "topicCommentCell") as! CommentTableViewCell
-        commentCell.userName.text = topicActivity!.comments[indexPath.row].target_user_name;
+        commentCell.userName.text = topicActivity!.comments[indexPath.row].user_name;
         commentCell.comment.text = topicActivity!.comments[indexPath.row].content;
         let timeString=topicActivity!.comments[indexPath.row].created_at
         let dateFormatter=DateFormatter()
@@ -31,12 +29,10 @@ class TopicCommentController: UIViewController,UITableViewDelegate,UITableViewDa
         commentCell.userImg.layer.masksToBounds=true
         return commentCell;
     }
-    
-    
 
     @IBAction func sendPost(_ sender: Any) {
         if(writeComment.text != ""){
-            let data=ActivityComment(content: writeComment.text!, id: 0, user_id: topicActivity!.user_id, activity_id: String(topicActivity!.id) , target_user: topicActivity!.user_id, user_name: "", target_user_name: "", created_at:"")
+            let data=ActivityComment(content: writeComment.text!, id: 0, user_id: topicActivity!.user_id, activity_id: String(topicActivity!.id) , target_user: topicActivity!.user_id, user_name: (UserInfo.myInfo?.name)!, target_user_name: "", created_at:"")
             let encoder=JSONEncoder();
             encoder.outputFormatting = .prettyPrinted
             let json=try? encoder.encode(data)
@@ -58,9 +54,41 @@ class TopicCommentController: UIViewController,UITableViewDelegate,UITableViewDa
                         //print(printString)
                         let reply = try JSONDecoder().decode(Reply.self, from: data)
                         if(reply.message=="success"){
+                            
+                            
                             DispatchQueue.main.async {
+                                
+                                let alertController = UIAlertController(title: "评论成功!",
+                                                                        message: nil, preferredStyle: .alert)
+                                //显示提示框
+                                self.present(alertController, animated: true, completion: nil)
+                                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now()+1) {
+                                    self.presentedViewController?.dismiss(animated: false, completion: nil);
+                                    self.navigationController?.popViewController(animated: true)
+                                    //跳回之前界面
+                                }
+
+                            }
+                         
+                            
+
+                            /*let alertToast = UIAlertController(title: "温馨提示", message: "评论成功", preferredStyle: .alert)
+                            self.present(alertToast, animated: true, completion: nil)
+                            //一秒钟后自动消失
+                            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                                alertToast.dismiss(animated: false, completion: nil)
+                                self.navigationController?.popViewController(animated: true)
+                            }*/
+                            /*DispatchQueue.main.async {
+                                 //self.navigationController?.popViewController(animated: true)
                                 let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "topicDetail");
                                 self.present(viewChange!, animated:true, completion:nil)
+                            }*/
+                        }
+                        else{
+                            DispatchQueue.main.async {
+                                self.displayMyAlertMessage(userMesaage:
+                                    "发送失败" )
                             }
                         }
                     } catch{
@@ -122,6 +150,13 @@ class TopicCommentController: UIViewController,UITableViewDelegate,UITableViewDa
         // Dispose of any resources that can be recreated.
     }
     
+    func displayMyAlertMessage(userMesaage:String){
+        var myAlert = UIAlertController(title:"提示",message:userMesaage,preferredStyle:UIAlertControllerStyle.alert);
+        let okAction = UIAlertAction(title:"Ok",style:UIAlertActionStyle.default,handler:nil);
+        myAlert.addAction(okAction)
+        self.present(myAlert,animated:true,completion:nil)
+        //self.present(_, myAlert,animated, flag: true,completion: (() -> Void)? = nil);
+    }
     /*func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //return (topicActivity?.comments.count)!
     }

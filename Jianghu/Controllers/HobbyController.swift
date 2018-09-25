@@ -40,11 +40,11 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
             cell.imgs.append(cell.img4)
             cell.imgs.append(cell.img5)
             cell.imgs.append(cell.img6)
-            for i in cell.imgs
-            {
+            
+            for i in cell.imgs{
                 let g = UITapGestureRecognizer(target: self, action: #selector(showBigPic))
                 i.addGestureRecognizer(g)
-               // currentSelectedIndexPath=indexPath
+                // currentSelectedIndexPath=indexPath
                 i.isUserInteractionEnabled = true
             }
             
@@ -63,6 +63,8 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
             cell.cate.layer.cornerRadius=cell.cate.frame.height/10
             cell.head.layer.cornerRadius=cell.head.frame.height/2
             cell.head.layer.masksToBounds=true
+            cell.repostImg.isHidden=true
+            cell.repostLabel.isHidden=true
             cell.chatButton.addTarget(self, action: #selector(goToChat), for: .touchUpInside)
             cell.commentButton.addTarget(self, action: #selector(goToComment), for: .touchUpInside)
             cell.unlikeButton.addTarget(self, action: #selector(clickUnLike), for: .touchUpInside)
@@ -70,15 +72,32 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
             let img_array = hobbyArticles[indexPath.row].image_url.components(separatedBy: "|");
             cell.imgCount=img_array.count
             let totalImageView=6;
-            if(img_array.count<4){
+            if (img_array.count<4){
                 cell.imgStack2.isHidden=true;
                 cell.totalStackHeight.constant=90
-                
+                if (img_array.count == 1){
+                    cell.img2.isUserInteractionEnabled = false
+                    cell.img3.isUserInteractionEnabled = false
+                }else if(img_array.count == 2){
+                    cell.img3.isUserInteractionEnabled = false
+                }else{
+                   
+                }
             }
             else{
+                
                 cell.imgStack2.isHidden=false;
                 cell.totalStackHeight.constant=190
+                if(img_array.count == 4){
+                    cell.img5.isUserInteractionEnabled = false
+                    cell.img6.isUserInteractionEnabled = false
+                }else if(img_array.count == 5){
+                    cell.img6.isUserInteractionEnabled = false
+                }else{
+                    
+                }
             }
+      
             var  i=0
        //     print(img_array.count)
             while(i<totalImageView){
@@ -94,7 +113,6 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
                 }
                 i=i+1
             }
-
             return cell
         }
         else{
@@ -124,26 +142,70 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
         if let indexPath = hobbyContent.indexPathForRow(at: buttonPostion) {
             selectedHobby=hobbyArticles[indexPath.row]
         }
-        
         if(UserInfo.token != ""){
             if(String((UserInfo.myInfo?.id)!) != (selectedHobby?.user_id)!){
-                let alertController = UIAlertController(title: "联系人",
-                                                        message: "",
+                let alertController = UIAlertController(title: "选项",
+                                                        message: "联系人",
                                                         preferredStyle: .actionSheet)
-                alertController.addAction(UIAlertAction(title: "发送消息", style: .default) { _ in
+                 alertController.addAction(UIAlertAction(title: "发送消息", style: .default) { _ in
                     
                     self.performSegue(withIdentifier: "showContact", sender: self)
                     
                 })
+                
+                alertController.addAction(UIAlertAction(title: "举报", style: .default) { _ in
+                    let alert = UIAlertController(title: "温馨提示",
+                                                  message: "是否确定举报该用户所发内容？",
+                                                  preferredStyle: .alert)
+                    let cancel = UIAlertAction(title:"取消", style:.cancel)
+                    let confirm = UIAlertAction(title:"确定", style:.default){ (action) in
+                        print("上传给后台说要举报了")
+                    }
+                    alert.addAction(cancel)
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true, completion:  nil)
+                })
+                
+                alertController.addAction(UIAlertAction(title: "拉黑", style: .default) { _ in
+                    let alert = UIAlertController(title: "温馨提示",
+                                                  message: "是否确定拉黑该用户？",
+                                                  preferredStyle: .alert)
+                    let cancel = UIAlertAction(title:"取消", style:.cancel)
+                    let confirm = UIAlertAction(title:"确定", style:.default){ (action) in
+                        print("上传给后台说要拉黑了")
+                    }
+                    alert.addAction(cancel)
+                    alert.addAction(confirm)
+                    self.present(alert, animated: true, completion:  nil)
+                })
+                
                 alertController.addAction(UIAlertAction(title: "取消", style: .cancel))
-                present(alertController, animated: true)
+                if let popoverPresentationController = alertController.popoverPresentationController {
+                    popoverPresentationController.sourceView = self.view
+                    popoverPresentationController.sourceRect = sender.bounds
+                    // special for ipad
+                }
+                //present(alertController, animated: true)
+                self.present(alertController, animated: true, completion: nil)
             }
-           
         }
         else{
             let viewChange=self.storyboard?.instantiateViewController(withIdentifier: "login");
             self.show(viewChange!, sender: self)
         }
+    }
+    
+    @IBAction func reportTapped(_ sender: Any) {
+        let alert = UIAlertController(title: "温馨提示",
+                                      message: "是否确定举报该用户所发内容？",
+                                      preferredStyle: .alert)
+        let cancel = UIAlertAction(title:"取消", style:.cancel)
+        let confirm = UIAlertAction(title:"确定", style:.default){ (action) in
+            print("上传给后台说要举报了")
+        }
+        alert.addAction(cancel)
+        alert.addAction(confirm)
+        self.present(alert, animated: true, completion:  nil)
     }
     
     @objc func goToComment(sender: UIButton!) {
@@ -324,7 +386,7 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if(tableView==self.hobbyContent){
-            //print("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+           
         }
         else{
             self.nameView.scrollToItem(at: indexPath, at: .left, animated: true)
@@ -453,6 +515,7 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
     @IBOutlet var dropButton: UIButton!
     var selectedHobby:HobbyArticle?
     @IBAction func reloadSubview(_ sender: CustomizeSegmentedControl) {
+       
         for index in self.nameView.indexPathsForVisibleItems{
             let allCellItem=self.nameView.cellForItem(at: index) as!HobbyNameCell
             allCellItem.hobbyNameLable.textColor=UIColor.black
@@ -460,11 +523,12 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
                 allCellItem.layer.sublayers![1].removeFromSuperlayer()
             }
         }
-        let Collection_id=String(Globals.collections[sender.selectedValue].id) ;
+        let Collection_id=String(Globals.collections[sender.selectedValue].id);
         cates=Globals.getCateByCollectionID(collection_id: Collection_id);
         nameView.reloadData()
         dropdownMenu.reloadData()
         self.dropDownMenuHeight.constant = CGFloat(45*self.cates.count)
+        
     }
     
     @IBAction func GotoHobbyWrite(_ sender: Any) {
@@ -512,16 +576,49 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
         session.dataTask(with: request) { (data, response, error) in
             if let data=data{
                 do {
-                   // let printString=String(data: data, encoding: String.Encoding.utf8)
+                    let printString=String(data: data, encoding: String.Encoding.utf8)
+                    //print("LoadCollectionHobby")
+                    //print(printString)
                     Globals.collections=try JSONDecoder().decode([Collection].self, from: data)
                     var buttonString = ""
-                    for collection in Globals.collections{
-                        buttonString=buttonString + collection.name + "   ,"
+                    var i = 0
+                    while(i <= Globals.collections.count){
+                        if(i < Globals.collections.count-1){
+                            buttonString = buttonString + Globals.collections[i].name + "  ,"
+                        }
+                        else if (i == Globals.collections.count-1){
+                            buttonString = buttonString + Globals.collections[i].name
+                        }
+                        i = i+1
                     }
                     DispatchQueue.main.async {
                         self.segmentedView.ButtonTitleString=buttonString
                         self.segmentedView.updateView()
                     }
+                    //self.hobbyArticles=try JSONDecoder().decode([HobbyArticle].self, from: data)
+
+
+                    /*while(i<Globals.collections.count){
+                        if (i < Globals.collections.count){
+                            buttonString=buttonString + Globals.collections[i].name + "   ,"
+                            DispatchQueue.main.async {
+                                self.segmentedView.ButtonTitleString=buttonString
+                                self.segmentedView.updateView()
+                            }
+                        }
+                        else if(i == Globals.collections.count ){
+                            buttonString=buttonString + Globals.collections[i].name
+                            DispatchQueue.main.async {
+                                self.segmentedView.ButtonTitleString=buttonString
+                                self.segmentedView.updateView()
+                            }
+                        }
+                        else{
+                            return
+                        }
+                        i = i+1
+                    }*/
+           
                     //self.hobbyArticles=try JSONDecoder().decode([HobbyArticle].self, from: data)
                 } catch{
                     print(error);
@@ -546,6 +643,7 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
                         self.nameView.reloadData();
                         self.dropdownMenu.reloadData()
                         self.dropDownMenuHeight.constant = CGFloat(45*self.cates.count)
+                       
                     }
                 } catch{
                     print(error);
@@ -569,7 +667,9 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
             if let data=data{
                 do {
                     let printString=String(data: data, encoding: String.Encoding.utf8)
-                  //print(printString)
+                    //print("HobbyHobby")
+                    //print(cate_id)
+                    //print(printString)
                     self.hobbyArticles=try JSONDecoder().decode([HobbyArticle].self, from: data)
                 } catch{
                     print(error);
@@ -599,6 +699,7 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
                     cell.layer.addSublayer(border)
                     cell.hobbyNameLable.textColor=UIColor.red
                     self.ifLoadFromDropDown=false
+                   
                 }
             }
             }.resume();
@@ -608,6 +709,7 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
    
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
+       
         /*
         loading.startAnimating()
         loading.isHidden=false
@@ -644,6 +746,7 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
         dropdownMenu.delegate=self
         dropdownMenu.separatorStyle = .none
         initialAdTop=adTop.constant
+        
         super.viewDidLoad()
         refresher=UIRefreshControl();
         refresher.addTarget(self, action: #selector(HobbyController.reloadHobbies), for: UIControlEvents.valueChanged)
@@ -657,7 +760,9 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
         hobbyContent.isHidden=true
         loadCollection();
         loadAllCate();
-        loadHobbies(cate_id:"1");
+        loadHobbies(cate_id:"6");
+        
+        //期初是loadHobbies(cate_id:"1")
         for index in self.nameView.indexPathsForVisibleItems{
             let allCellItem=self.nameView.cellForItem(at: index) as!HobbyNameCell
             allCellItem.hobbyNameLable.textColor=UIColor.black
@@ -666,7 +771,6 @@ class HobbyController:UIViewController,UICollectionViewDataSource,UICollectionVi
             }
         }
         segmentedView.initialization();
-        
     }
 }
 

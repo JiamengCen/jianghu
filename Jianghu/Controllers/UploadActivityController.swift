@@ -103,19 +103,25 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
         if(field==time){
             let done = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector(donePressed))
             toolbar.setItems([done], animated: false)
+            field.inputAccessoryView = toolbar
+            field.inputView = timePicker
+            
+            // format picker for date
+            timePicker.datePickerMode = .date
         }
         else if(field==end){
             let done = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector(donePressedEndTime))
             toolbar.setItems([done], animated: false)
+            field.inputAccessoryView = toolbar
+            field.inputView = timePickerEnd
+            
+            // format picker for date
+            timePickerEnd.datePickerMode = .date
         }
         // done button for toolbar
         
         
-        field.inputAccessoryView = toolbar
-        field.inputView = timePicker
-        
-        // format picker for date
-        timePicker.datePickerMode = .date
+       
     }
     
     @objc func donePressed() {
@@ -139,12 +145,14 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
         formatter.dateFormat="yyyy-MM-dd"
-        let dateString = formatter.string(from: timePicker.date)
+        let dateString = formatter.string(from: timePickerEnd.date)
         
         end.text = "\(dateString)"
+        print("开始时间")
+        print(end.text)
         self.view.endEditing(true)
-        timePicker = UIDatePicker()
-        timePicker.isHidden=true
+        timePickerEnd = UIDatePicker()
+        timePickerEnd.isHidden=true
     }
     
     
@@ -156,6 +164,7 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
 
     
     var timePicker = UIDatePicker()
+    var timePickerEnd = UIDatePicker()
     //@IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var end: UITextField!
     @IBOutlet weak var imgBottom: UIImageView!
@@ -188,7 +197,7 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
             
             let imageData_bottom = UIImageJPEGRepresentation(imgBottom.image!, 0.1)!
             let imgString_bottom = imageData_bottom.base64EncodedString()
-            let data=ActivityUpload(content: content.text!, title: activityTitle.text!, user_id: String((UserInfo.myInfo?.id)!) , collection_id: String(selectedCollectionID), cate_id: String(selectedCateID) , address: place.text!, start_time: time.text!, end_time: end.text!, img_url_top: imgString_top, img_url_bottom: imgString_bottom, type: String( selectedType))
+            let data=ActivityUpload(content: content.text!, title: activityTitle.text!, user_id: String((UserInfo.myInfo?.id)!) , collection_id: String(selectedCollectionID), cate_id: String(selectedCateID) , address: place.text!, start_time: time.text!, end_time: end.text!, img_url_top: imgString_top, img_url_bottom: imgString_bottom, type: String(selectedType))
             let encoder=JSONEncoder();
             encoder.outputFormatting = .prettyPrinted
             let json=try? encoder.encode(data)
@@ -207,7 +216,7 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
                 if let data=data{
                     do {
                         let printString=String(data: data, encoding: String.Encoding.utf8)
-                        print(printString)
+                        //print(printString)
                         let reply = try JSONDecoder().decode(Reply.self, from: data)
                         if(reply.message=="success"){
                             DispatchQueue.main.async {
@@ -217,10 +226,19 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
                         }
                     } catch{
                         print(error);
+
                     }
                 }
                 }.resume();
             
+        }
+        else{
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "提示", message: "请填满所有信息", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "好的", style: UIAlertActionStyle.default, handler: nil))
+                alert.addAction(UIAlertAction(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
     
@@ -257,8 +275,8 @@ class UploadActivityController: UIViewController,UIPickerViewDelegate,UIPickerVi
         content.layer.borderWidth=1.0;
         content.layer.borderColor=UIColor.lightGray.cgColor;
         content.layer.cornerRadius=content.frame.height/6;
-        createDatePicker(field: end)
         createDatePicker(field: time)
+        createDatePicker(field: end)
         //timePicker.isHidden=true
         super.viewDidLoad()
 

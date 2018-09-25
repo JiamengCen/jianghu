@@ -6,6 +6,8 @@
 //  Copyright © 2018年 InternationalTradeMaster. All rights reserved.
 //
 
+
+
 import UIKit
 
 @IBDesignable
@@ -75,6 +77,7 @@ class CustomizeSegmentedControl: UIControl {
                 btn.titleEdgeInsets.bottom = 4;
             }
         }
+        print(11111111111111)
         selectedValue=buttons.index(of: button)!;
         let selectorStartPosition=frame.width/CGFloat(buttons.count)*CGFloat(selectedValue)
         UIView.animate(withDuration: 0.3, animations: {
@@ -104,14 +107,14 @@ class CustomizeSegmentedControl: UIControl {
         let sv=UIStackView(arrangedSubviews: buttons)
         let selectorWidth=frame.width/CGFloat(buttonTitles.count)
         selector=UIView(frame: CGRect(x: 0, y: 0, width: selectorWidth, height: frame.height))
-       /* let border = CALayer()
-        let borderWidth = CGFloat(2.0)
-        border.borderColor = UIColor.black.cgColor
-        border.frame = CGRect(x: selector.frame.size.width*0.3, y: self.frame.size.height - borderWidth, width:  selector.frame.size.width*0.4, height: selector.frame.size.height)
-        border.borderWidth = borderWidth
-        selector.layer.addSublayer(border)
-        self.layer.masksToBounds = true*/
-
+        /* let border = CALayer()
+         let borderWidth = CGFloat(2.0)
+         border.borderColor = UIColor.black.cgColor
+         border.frame = CGRect(x: selector.frame.size.width*0.3, y: self.frame.size.height - borderWidth, width:  selector.frame.size.width*0.4, height: selector.frame.size.height)
+         border.borderWidth = borderWidth
+         selector.layer.addSublayer(border)
+         self.layer.masksToBounds = true*/
+        
         addSubview(selector);
         sv.axis = .horizontal
         sv.alignment = .fill
@@ -129,8 +132,8 @@ class CustomizeSegmentedControl: UIControl {
     override func draw(_ rect: CGRect) {
         // Drawing code
     }
- 
-
+    
+    
 }
 
 

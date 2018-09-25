@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2.0</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>9</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
@@ -31,10 +31,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>江湖需要访问您的相机扫二维码</string>
-    
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>江湖需要访问您的相册上传图片</string>
-    
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>江湖需要访问您的相册上传图片</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>PingFangSC-Regular.ttf</string>

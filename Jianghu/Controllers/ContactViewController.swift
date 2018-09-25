@@ -145,7 +145,7 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
         NotificationCenter.default.addObserver(self, selector: #selector(ContactViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         
         
-        let data = ChatRoomData(user_one_id: String( (UserInfo.myInfo!.id)), user_two_id: another_user_id!)
+        let chatroomdata = ChatRoomData(user_one_id: String(UserInfo.myInfo!.id), user_two_id: another_user_id!)
         
         guard let url=URL(string: "https://app.meljianghu.com/api/chat/create_one_to_one_chat") else{return}
         let headers = [ "Content-Type": "application/json",
@@ -155,7 +155,7 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
         request.httpMethod="POST"
         let encoder=JSONEncoder();
         encoder.outputFormatting = .prettyPrinted
-        let json=try? encoder.encode(data)
+        let json=try? encoder.encode(chatroomdata)
         let para=String(data:json!, encoding: .utf8)
         print(para)
         request.httpBody = para!.data(using: String.Encoding.utf8);
@@ -166,11 +166,16 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 do {
                     let printString=String(data: data, encoding: String.Encoding.utf8)
                     print(printString)
+                   
                     self.contact = try JSONDecoder().decode(Contact.self, from: data)
+                    print(type(of: self.contact?.user_one_id))
+                    print(type(of: self.contact?.user_two_id))
                     self.chat()
 
                 } catch{
                     print(error);
+                    var i = 0
+                    
                 }
             }
             }.resume();
@@ -186,7 +191,6 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 return req
         }
         )
-        
         let chatManager = ChatManager(
             instanceLocator: "v1:us1:8d67a96f-8562-4da4-9e53-97099ce7c73c",
             tokenProvider: tokenProvider,
@@ -216,7 +220,10 @@ class ContactViewController: UIViewController,UITableViewDelegate,UITableViewDat
             self.currentUser = currentUser
             
             for room in currentUser.rooms{
-                currentUser.subscribeToRoom(room: room, roomDelegate: self)
+                if( room.id==Int((self.contact?.room_id)!)!){
+                    
+                    currentUser.subscribeToRoom(room: room, roomDelegate: self)
+                }
             }
         }
     }

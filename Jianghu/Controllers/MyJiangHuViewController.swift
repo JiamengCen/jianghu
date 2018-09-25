@@ -94,7 +94,7 @@ class MyJiangHuViewController: UIViewController,UITableViewDelegate,UITableViewD
             let dateFormatter=DateFormatter()
             dateFormatter.dateFormat="yyyy-MM-dd HH:mm:ss"
             let dateObj = dateFormatter.date(from: timeString)
-            dateFormatter.dateFormat="dd/MM/yy"
+            dateFormatter.dateFormat="dd/MM/yy" 
             let displayedTime=dateFormatter.string(from: dateObj!)
             cell.time.text = displayedTime
             cell.content.text=hobbyArticles[indexPath.row].content
